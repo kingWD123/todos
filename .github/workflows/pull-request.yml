@@ -1,0 +1,49 @@
+name: Pull Request
+on:
+  push:
+    branches:
+      - 'DIC1-*'
+      - 'IS-*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      MY_ENV_VAR: value
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Scan de secrets
+        run: |
+          echo "Todo : Scan de secrets"
+        shell: bash
+
+      - name: Scan des vulnérabilités
+        run: |
+          echo "Todo : Scan des vulnérabilités"
+        shell: bash
+
+      - name: Unit Tests
+        run: |
+          mvn test -Put -Pit
+        shell: bash
+
+      - name: Quality Gate
+        run: |
+          echo "Todo : Quality Gate"
+        shell: bash
+
+      - name: Check Quality Gate
+        run: |
+          echo "Todo : Check Quality Gate"
+        shell: bash

@@ -1,0 +1,6 @@
+
+GET http://localhost:8080/cicd/api/todos?page=0&size=10
+
+Content-Type: application/json
+
+

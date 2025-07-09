@@ -1,0 +1,7 @@
+
+${AnsiColor.GREEN}  _   _   _   _     _     _   _   _     _     _   _   _   _   _
+${AnsiColor.GREEN} / \ / \ / \ / \   / \   / \ / \ / \   / \   / \ / \ / \ / \ / \
+${AnsiColor.GREEN}( < | E | P | T ) ( - ) ( G | I | T ) ( - ) ( D | I | C | 1 | > )
+${AnsiColor.GREEN} \_/ \_/ \_/ \_/   \_/   \_/ \_/ \_/   \_/   \_/ \_/ \_/ \_/ \_/
+${AnsiColor.BLUE}${AnsiStyle.BOLD}${AnsiStyle.ITALIC}Powered by Ing. & Dr I.SENE using Spring Boot ${spring-boot.formatted-version}
+${AnsiColor.DEFAULT}
