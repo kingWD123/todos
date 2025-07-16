@@ -1,49 +1,49 @@
-name: Pull Request
+name: PR Pipeline
 on:
-  push:
-    branches:
-      - 'DIC1-*'
-      - 'IS-*'
+  pull_request:
+    branches: [ main, master ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    env:
-      MY_ENV_VAR: value
-
     steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-
-      - name: Scan de secrets
-        run: |
-          echo "Todo : Scan de secrets"
-        shell: bash
-
-      - name: Scan des vulnérabilités
-        run: |
-          echo "Todo : Scan des vulnérabilités"
-        shell: bash
-
-      - name: Unit Tests
-        run: |
-          mvn test -Put -Pit
-        shell: bash
-
-      - name: Quality Gate
-        run: |
-          echo "Todo : Quality Gate"
-        shell: bash
-
-      - name: Check Quality Gate
-        run: |
-          echo "Todo : Check Quality Gate"
-        shell: bash
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        
+    - name: Scan secrets with Gitleaks
+      uses: gitleaks/gitleaks-action@v2
+      
+    - name: Dependency Vulnerability Check
+      uses: jeremylong/DependencyCheck@v6.5.0
+      with:
+        format: 'HTML'
+        output-directory: 'dependency-check-report'
+        
+    - name: Build and run tests with Maven
+      run: mvn -B clean verify
+      
+    - name: Cache SonarCloud packages
+      uses: actions/cache@v3
+      with:
+        path: ~/.sonar/cache
+        key: ${{ runner.os }}-sonar
+        
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v2
+      with:
+        projectBaseDir: .
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_PROJECT_KEY: votre-organisation_todos
+        SONAR_ORGANIZATION: votre-organisation
+        
+    - name: Wait for Quality Gate
+      uses: sonarqube-quality-gate-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
