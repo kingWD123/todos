@@ -1,0 +1,45 @@
+name: Pipeline de Build & Déploiement
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    env:
+      MY_ENV_VAR: value
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: '${{ github.token }}'
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          
+
+      - name: Release
+        id: read_version
+        run: |
+          CURRENT_VERSION=$(cat version.txt)
+          echo "Current version: $CURRENT_VERSION"
+          echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
+
+      - name: commit du fichier version.txt
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add version.txt
+          git commit -m "chore: bump version to ${{ env.NEW_VERSION }}" || echo "No changes to commit"
+          git push
+
+      - name: Creation du tag Git
+        run: |
+          git tag "v${{ env.NEW_VERSION }}"
+          git push origin "v${{ env.NEW_VERSION }}"
