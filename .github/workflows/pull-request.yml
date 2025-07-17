@@ -40,8 +40,8 @@ jobs:
         projectBaseDir: .
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_PROJECT_KEY: kingWD123_kingWD123
-        SONAR_ORGANIZATION: kingWD123
+        SONAR_PROJECT_KEY: bakugo-todos
+        SONAR_ORGANIZATION: Bakugo_todos
         
     - name: Wait for Quality Gate
       uses: sonarqube-quality-gate-action@master
