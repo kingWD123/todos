@@ -1,4 +1,8 @@
 name: Pipeline de Build & Déploiement
+
+permissions:
+  contents: write
+
 on:
   push:
     branches:
@@ -22,8 +26,45 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          
 
+      # scan de vulnerabilite
+      - name: Scan secrets with Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+
+      # test de vulnerabilité
+      - name: Dependency Vulnerability Check
+        uses: jeremylong/DependencyCheck@v6.5.0
+        with:
+          format: 'HTML'
+          output-directory: 'dependency-check-report'
+
+      #test unitaire
+      - name: Build and run tests with Maven
+        run: mvn -B clean verify
+
+      # Sonar cloud
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          projectBaseDir: .
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: AdjaSoukeynaDiop_todos
+          SONAR_ORGANIZATION: AdjaSoukeynaDiop
+
+      # Quality Gate
+      - name: Wait for Quality Gate
+        uses: sonarqube-quality-gate-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      # lecture de la version
       - name: Release
         id: read_version
         run: |
@@ -31,6 +72,18 @@ jobs:
           echo "Current version: $CURRENT_VERSION"
           echo "CURRENT_VERSION=$CURRENT_VERSION" >> $GITHUB_ENV
 
+      # incrementation de la version
+      - name: Bump version
+        id: bump_version
+        run: |
+          IFS='.' read -r MAJOR MINOR <<< "$CURRENT_VERSION"
+          MINOR=$((MINOR + 1))
+          NEW_VERSION="${MAJOR}.${MINOR}"
+          echo "New version: $NEW_VERSION"
+          echo "$NEW_VERSION" > version.txt
+          echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
+
+      #commit du fichier version.txt
       - name: commit du fichier version.txt
         run: |
           git config user.name "github-actions[bot]"
@@ -39,7 +92,27 @@ jobs:
           git commit -m "chore: bump version to ${{ env.NEW_VERSION }}" || echo "No changes to commit"
           git push
 
+        # creation du tag git
       - name: Creation du tag Git
         run: |
           git tag "v${{ env.NEW_VERSION }}"
           git push origin "v${{ env.NEW_VERSION }}"
+
+        # connexion à Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # build des images Docker
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/monapp:${{ env.NEW_VERSION }} -t ${{ secrets.DOCKER_USERNAME }}/monapp:latest .
+
+      # push des images Docker
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/monapp:${{ env.NEW_VERSION }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/monapp:latest
+
