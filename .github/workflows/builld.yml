@@ -105,5 +105,5 @@ jobs:
           image: bakugo221/todos_project
           registry: docker.io
           enableBuildKit: true
-          username: ${{ bakugo221 }}
-          password: ${{ dckr_pat_xxItAUSJnR4kehYYd_w29i9q8d8 }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
