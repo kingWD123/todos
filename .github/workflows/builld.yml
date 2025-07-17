@@ -83,6 +83,7 @@ jobs:
           echo "$NEW_VERSION" > version.txt
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
+      #commit du fichier version.txt
       - name: commit du fichier version.txt
         run: |
           git config user.name "github-actions[bot]"
@@ -91,7 +92,27 @@ jobs:
           git commit -m "chore: bump version to ${{ env.NEW_VERSION }}" || echo "No changes to commit"
           git push
 
+        # creation du tag git
       - name: Creation du tag Git
         run: |
           git tag "v${{ env.NEW_VERSION }}"
           git push origin "v${{ env.NEW_VERSION }}"
+
+        # connexion à Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # build des images Docker
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/monapp:${{ env.NEW_VERSION }} -t ${{ secrets.DOCKER_USERNAME }}/monapp:latest .
+
+      # push des images Docker
+      - name: Push Docker image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/monapp:${{ env.NEW_VERSION }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/monapp:latest
+
