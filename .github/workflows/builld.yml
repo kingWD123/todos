@@ -1,0 +1,30 @@
+name: Pipeline de Build & Déploiement
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+
+    env:
+      MY_ENV_VAR: value
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          token: '${{ github.token }}'
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          
+
+      - name: Scan de secrets avec GitLeak
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          config-path: .gitleaks.toml
