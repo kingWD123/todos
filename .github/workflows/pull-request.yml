@@ -44,6 +44,6 @@ jobs:
         SONAR_ORGANIZATION: Bakugo_todos
         
     - name: Wait for Quality Gate
-      uses: sonarqube-quality-gate-action@master
+      uses: SonarSource/sonarqube-quality-gate-action@master
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
