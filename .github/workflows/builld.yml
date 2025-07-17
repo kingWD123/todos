@@ -99,8 +99,8 @@ jobs:
           git push origin "v${{ env.NEW_VERSION }}"
 
       # build and push docker image
-      - uses: mr-smithers-excellent/docker-build-push@v6
-        name: Build & push Docker image
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: bakugo221/todos_project
           registry: docker.io
