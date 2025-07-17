@@ -1,4 +1,8 @@
 name: Pipeline de Build & Déploiement
+
+permissions:
+  contents: write
+
 on:
   push:
     branches:
