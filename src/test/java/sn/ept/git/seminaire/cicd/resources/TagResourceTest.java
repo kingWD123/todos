@@ -35,4 +35,24 @@ class TagResourceTest {
     @Test
     void delete() {
     }
+
+    @Test
+    void testFindAll() {
+    }
+
+    @Test
+    void testFindById() {
+    }
+
+    @Test
+    void testCreate() {
+    }
+
+    @Test
+    void testUpdate() {
+    }
+
+    @Test
+    void testDelete() {
+    }
 }
