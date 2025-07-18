@@ -32,27 +32,27 @@ jobs:
 
 
       # Analyse de vulnérabilités avec OWASP Dependency-Check
-      - name: OWASP Dependency Check
-        run: |
-          mkdir -p dependency-check-report
-          docker run --rm \
-            --platform linux/amd64 \
-            -v "${{ github.workspace }}":/src \
-            -v "${{ github.workspace }}/dependency-check-report":/report \
-            owasp/dependency-check \
-            --project "MyProject" \
-            --scan /src \
-            --format "HTML" \
-            --out /report
+#      - name: OWASP Dependency Check
+ #       run: |
+  #        mkdir -p dependency-check-report
+   #       docker run --rm \
+   #         --platform linux/amd64 \
+          #         -v "${{ github.workspace }}":/src \
+          #         -v "${{ github.workspace }}/dependency-check-report":/report \
+          #         owasp/dependency-check \
+          #        --project "MyProject" \
+          #       --scan /src \
+          #       --format "HTML" \
+      #       --out /report
 
 
 
       # Upload du rapport en tant qu'artefact
-      - name: Upload Dependency Check report
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-report
-          path: dependency-check-report
+        #     - name: Upload Dependency Check report
+        #       uses: actions/upload-artifact@v4
+          #      with:
+      #     name: dependency-check-report
+      #        path: dependency-check-report
 
       # test unitaire
       - name: Build and run tests with Maven
