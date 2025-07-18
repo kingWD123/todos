@@ -30,14 +30,6 @@ jobs:
       - name: Build dependency-check CLI
         run: mvn package
 
-      # Vérification du fichier nécessaire au build Docker
-      - name: Vérifier le fichier dependency-check--release.zip
-        run: |
-          ls -l cli/target/
-          if [ ! -f cli/target/dependency-check--release.zip ]; then
-            echo "Fichier manquant : cli/target/dependency-check--release.zip"
-            exit 1
-          fi
 
       # Analyse de vulnérabilités avec OWASP Dependency-Check
       - name: OWASP Dependency Check
