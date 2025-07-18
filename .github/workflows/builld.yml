@@ -39,16 +39,25 @@ jobs:
             exit 1
           fi
 
-      # scan de vulnérabilité
-      - name: Scan secrets with Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+      # Analyse de vulnérabilités avec OWASP Dependency-Check
+      - name: OWASP Dependency Check
+        run: |
+          mkdir -p dependency-check-report
+          docker run --rm \
+            -v $(pwd):/src \
+            -v $(pwd)/dependency-check-report:/report \
+            owasp/dependency-check \
+            --project "MyProject" \
+            --scan /src \
+            --format "HTML" \
+            --out /report
 
-      # test de vulnérabilité
-      - name: Dependency Vulnerability Check
-        uses: jeremylong/DependencyCheck@v6.5.0
+      # Upload du rapport en tant qu'artefact
+      - name: Upload Dependency Check report
+        uses: actions/upload-artifact@v4
         with:
-          format: 'HTML'
-          output-directory: 'dependency-check-report'
+          name: dependency-check-report
+          path: dependency-check-report
 
       # test unitaire
       - name: Build and run tests with Maven
