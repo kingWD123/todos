@@ -44,13 +44,14 @@ jobs:
         run: |
           mkdir -p dependency-check-report
           docker run --rm \
-            -v $(pwd):/src \
-            -v $(pwd)/dependency-check-report:/report \
+            -v "${{ github.workspace }}":/src \
+            -v "${{ github.workspace }}/dependency-check-report":/report \
             owasp/dependency-check \
             --project "MyProject" \
             --scan /src \
             --format "HTML" \
             --out /report
+
 
       # Upload du rapport en tant qu'artefact
       - name: Upload Dependency Check report
