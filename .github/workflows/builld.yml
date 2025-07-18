@@ -44,6 +44,7 @@ jobs:
         run: |
           mkdir -p dependency-check-report
           docker run --rm \
+            --platform linux/amd64 \
             -v "${{ github.workspace }}":/src \
             -v "${{ github.workspace }}/dependency-check-report":/report \
             owasp/dependency-check \
@@ -51,6 +52,7 @@ jobs:
             --scan /src \
             --format "HTML" \
             --out /report
+
 
 
       # Upload du rapport en tant qu'artefact
