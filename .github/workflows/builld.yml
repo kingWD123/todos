@@ -69,10 +69,11 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=bakugo-todos
+            -Dsonar.organization=Bakugo_todos
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: bakugo-todos
-          SONAR_ORGANIZATION: Bakugo_todos
 
       # Quality Gate
       - name: Wait for Quality Gate
