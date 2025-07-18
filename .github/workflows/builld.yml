@@ -30,11 +30,20 @@ jobs:
       - name: Build dependency-check CLI
         run: mvn package -pl cli -am
 
-      # scan de vulnérabilite
+      # Vérification du fichier nécessaire au build Docker
+      - name: Vérifier le fichier dependency-check--release.zip
+        run: |
+          ls -l cli/target/
+          if [ ! -f cli/target/dependency-check--release.zip ]; then
+            echo "Fichier manquant : cli/target/dependency-check--release.zip"
+            exit 1
+          fi
+
+      # scan de vulnérabilité
       - name: Scan secrets with Gitleaks
         uses: gitleaks/gitleaks-action@v2
 
-      # test de vulnerabilité
+      # test de vulnérabilité
       - name: Dependency Vulnerability Check
         uses: jeremylong/DependencyCheck@v6.5.0
         with:
