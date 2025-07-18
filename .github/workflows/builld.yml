@@ -28,7 +28,7 @@ jobs:
 
       # build Maven pour générer les artefacts nécessaires à DependencyCheck
       - name: Build dependency-check CLI
-        run: mvn package -pl cli -am
+        run: mvn package
 
       # Vérification du fichier nécessaire au build Docker
       - name: Vérifier le fichier dependency-check--release.zip
