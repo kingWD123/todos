@@ -12,7 +12,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-
     env:
       MY_ENV_VAR: value
 
@@ -27,7 +26,11 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # scan de vulnerabilite
+      # build Maven pour générer les artefacts nécessaires à DependencyCheck
+      - name: Build dependency-check CLI
+        run: mvn package -pl cli -am
+
+      # scan de vulnérabilite
       - name: Scan secrets with Gitleaks
         uses: gitleaks/gitleaks-action@v2
 
@@ -38,7 +41,7 @@ jobs:
           format: 'HTML'
           output-directory: 'dependency-check-report'
 
-      #test unitaire
+      # test unitaire
       - name: Build and run tests with Maven
         run: mvn -B clean verify
 
@@ -83,7 +86,7 @@ jobs:
           echo "$NEW_VERSION" > version.txt
           echo "NEW_VERSION=$NEW_VERSION" >> $GITHUB_ENV
 
-      #commit du fichier version.txt
+      # commit du fichier version.txt
       - name: commit du fichier version.txt
         run: |
           git config user.name "github-actions[bot]"
@@ -92,7 +95,7 @@ jobs:
           git commit -m "chore: bump version to ${{ env.NEW_VERSION }}" || echo "No changes to commit"
           git push
 
-        # creation du tag git
+      # creation du tag git
       - name: Creation du tag Git
         run: |
           git tag "v${{ env.NEW_VERSION }}"
