@@ -46,10 +46,12 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=adjasoukeynadiop
+            -Dsonar.organization=AdjaSoukeynaDiop
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: adjasoukeynadiop
-          SONAR_ORGANIZATION: AdjaSoukeynaDiop
+
 
       # quality gate
       - name: Wait for Quality Gate
