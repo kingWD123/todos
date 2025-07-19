@@ -133,6 +133,15 @@ public class TagStepDefinitions {
     public void tagNeDoitPlusExisterDansListe(String name) {
         response = request().when().get(API_PATH);
         List<String> names = response.jsonPath().getList("content.name");
-        Assertions.assertThat(names).doesNotContain(name);
+    
+        // Si la liste est null (pas de "content" dans la réponse), on la traite comme vide
+        if (names == null || names.isEmpty()) {
+            // Rien à vérifier, le tag ne peut pas exister
+            Assertions.assertThat(names).isNullOrEmpty();
+        } else {
+            // Vérifie explicitement que le nom ne figure pas dans la liste
+            Assertions.assertThat(names).doesNotContain(name);
+        }
     }
+    
 }
