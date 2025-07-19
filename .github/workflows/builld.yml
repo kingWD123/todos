@@ -41,17 +41,37 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
 
-      #scan sonar cloud
+      - name: Scan secrets with Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+
+      - name: Dependency Vulnerability Check
+        uses: jeremylong/DependencyCheck@v6.5.0
+        with:
+          format: 'HTML'
+          output-directory: 'dependency-check-report'
+
+      - name: Build and run tests with Maven
+        run: mvn -B clean verify
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=bakugo-todos
-            -Dsonar.organization=Bakugo_todos
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: AdjaSoukeynaDiop_todos
+          SONAR_ORGANIZATION: AdjaSoukeynaDiop
 
+      - name: Wait for Quality Gate
+        uses: sonarqube-quality-gate-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       # quality gate
       - name: Wait for Quality Gate
