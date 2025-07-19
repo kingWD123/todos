@@ -41,19 +41,6 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
 
-      #scan sonar cloud
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=AdjaSoukeynaDiop_todos
-            -Dsonar.organization=AdjaSoukeynaDiop
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-
 
       # quality gate
       - name: Wait for Quality Gate
