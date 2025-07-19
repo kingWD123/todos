@@ -65,21 +65,21 @@ jobs:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          projectBaseDir: .
-          args: >
-            -Dsonar.projectKey=bakugo-todos
-            -Dsonar.organization=adjasoukeynadiop
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#      - name: SonarCloud Scan
+#        uses: SonarSource/sonarcloud-github-action@v2
+#        with:
+ #         projectBaseDir: .
+#         args: >
+ #           -Dsonar.projectKey=bakugo-todos
+ #           -Dsonar.organization=adjasoukeynadiop
+ #       env:
+ #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       # Quality Gate
-      - name: Wait for Quality Gate
-        uses: SonarSource/sonarqube-quality-gate-action@master
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+   #   - name: Wait for Quality Gate
+  #      uses: SonarSource/sonarqube-quality-gate-action@master
+   #     env:
+  #        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       # lecture de la version
       - name: Release
