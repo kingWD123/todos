@@ -71,7 +71,7 @@ jobs:
           projectBaseDir: .
           args: >
             -Dsonar.projectKey=bakugo-todos
-            -Dsonar.organization=Bakugo_todos
+            -Dsonar.organization=adjasoukeynadiop
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
