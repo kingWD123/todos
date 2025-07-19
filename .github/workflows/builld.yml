@@ -120,6 +120,7 @@ jobs:
         uses: mr-smithers-excellent/docker-build-push@v6
         with:
           image: bakugo221/todos_project
+          tags: ${{ env.NEW_VERSION }},latest
           registry: docker.io
           enableBuildKit: true
           username: ${{ secrets.DOCKER_USERNAME }}
