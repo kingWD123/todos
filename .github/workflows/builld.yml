@@ -47,10 +47,12 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           projectBaseDir: .
+          args: >
+            -Dsonar.projectKey=AdjaSoukeynaDiop_todos
+            -Dsonar.organization=AdjaSoukeynaDiop
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_PROJECT_KEY: AdjaSoukeynaDiop_todos
-          SONAR_ORGANIZATION: AdjaSoukeynaDiop
+
 
 
       # quality gate
