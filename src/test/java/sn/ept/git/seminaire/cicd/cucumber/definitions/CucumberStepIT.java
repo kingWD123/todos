@@ -1,5 +1,5 @@
 package sn.ept.git.seminaire.cicd.cucumber.definitions;
-
+    
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
@@ -23,6 +23,7 @@ import sn.ept.git.seminaire.cicd.data.TestData;
 import sn.ept.git.seminaire.cicd.models.TodoDTO;
 import sn.ept.git.seminaire.cicd.entities.Todo;
 import sn.ept.git.seminaire.cicd.repositories.TodoRepository;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,6 +33,7 @@ import java.util.stream.Collectors;
 
 import static io.restassured.RestAssured.given;
 
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Slf4j
 public class CucumberStepIT {
 
@@ -51,6 +53,7 @@ public class CucumberStepIT {
 
     @LocalServerPort
     private int port;
+
     @Autowired
     private TodoRepository todoRepository;
 

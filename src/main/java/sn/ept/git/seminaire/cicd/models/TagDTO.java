@@ -18,4 +18,4 @@ public class TagDTO extends BaseDTO {
     @Size(min = SizeMapping.Name.MIN,max = SizeMapping.Name.MAX)
     private  String name;
 
-}
+}   

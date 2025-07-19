@@ -1,6 +1,7 @@
 package sn.ept.git.seminaire.cicd.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 import sn.ept.git.seminaire.cicd.utils.SizeMapping;
@@ -24,6 +25,7 @@ import java.util.Set;
 @Entity
 @Table(name = "acicd_tags")
 @DynamicUpdate
+@JsonIgnoreProperties(ignoreUnknown = true)
 public final class Tag extends BaseEntity implements Serializable {
 
     @NotBlank
